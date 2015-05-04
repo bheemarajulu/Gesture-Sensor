@@ -29,7 +29,7 @@ IMPORTANT: The APDS-9960 can only accept 3.3V!
  GND          GND              Ground
  A4           SDA              I2C Data
  A5           SCL              I2C Clock
- 3            INT              Interrupt
+ 2            INT              Interrupt
 
 Resources:
 Include Wire.h and SparkFun_APDS-9960.h
@@ -44,7 +44,8 @@ buy us a round!
 
 Distributed as-is; no warranty is given.
 ****************************************************************/
-
+Gesture Sensor Sparkfun APDS9960 interfaced with pro trinket 3.3v
+/***************************************************************/
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
 
@@ -70,7 +71,7 @@ void setup() {
   Serial.println(F("--------------------------------"));
   
   // Initialize interrupt service routine
-  //attachInterrupt(0, interruptRoutine, FALLING);
+  attachInterrupt(1, interruptRoutine, FALLING); // for pro trinket pin 2 is used for external interrupts for USB, use pin 3
 
   // Initialize APDS-9960 (configure I2C and initial values)
   if ( apds.init() ) {
@@ -87,10 +88,18 @@ void setup() {
   }
 }
 
-void loop() 
-  {
+void loop() {
+  if( isr_flag == 1 ) {
+    detachInterrupt(0);
     handleGesture();
-    }
+    isr_flag = 0;
+    attachInterrupt(0, interruptRoutine, FALLING);
+  }
+}
+
+void interruptRoutine() {
+  isr_flag = 1;
+}
 
 void handleGesture() {
     if ( apds.isGestureAvailable() ) {
