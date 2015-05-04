@@ -44,7 +44,7 @@ buy us a round!
 
 Distributed as-is; no warranty is given.
 ****************************************************************/
-Gesture Sensor Sparkfun APDS9960 interfaced with pro trinket 3.3v
+// Gesture Sensor Sparkfun APDS9960 interfaced with pro trinket 3.3v
 /***************************************************************/
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
